@@ -13,11 +13,8 @@ final StateNotifierProvider<AuthNotifier, AuthState> authNotifierProvider =
   ),
 );
 
-final StreamProvider<bool> isLoggedInProvider = StreamProvider<bool>((_) {
-  return FirebaseAuth.instance
-      .authStateChanges()
-      .map((User? user) => user != null);
-});
+final StreamProvider<bool> isLoggedInProvider = StreamProvider<bool>((_) =>
+    FirebaseAuth.instance.authStateChanges().map((User? user) => user != null));
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _authRepository;
