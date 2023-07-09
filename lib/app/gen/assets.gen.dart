@@ -16,11 +16,15 @@ class $AssetsIllustrationsGen {
   AssetGenImage get abstract =>
       const AssetGenImage('assets/illustrations/abstract.png');
 
+  /// File path: assets/illustrations/home_abstract.png
+  AssetGenImage get homeAbstract =>
+      const AssetGenImage('assets/illustrations/home_abstract.png');
+
   /// File path: assets/illustrations/o1.png
   AssetGenImage get o1 => const AssetGenImage('assets/illustrations/o1.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [abstract, o1];
+  List<AssetGenImage> get values => [abstract, homeAbstract, o1];
 }
 
 class Assets {

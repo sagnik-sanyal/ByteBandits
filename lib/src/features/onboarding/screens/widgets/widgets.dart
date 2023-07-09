@@ -2,7 +2,7 @@ part of 'package:bytebandits/src/features/onboarding/screens/onboarding_screen.d
 
 class _NextButton extends ConsumerWidget {
   final void Function()? onPressed;
-  const _NextButton({Key? key,this.onPressed}) : super(key: key);
+  const _NextButton({Key? key, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -11,7 +11,8 @@ class _NextButton extends ConsumerWidget {
       duration: const Duration(milliseconds: 100),
       child: val == 2
           ? ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: () =>
+                  ref.read(authNotifierProvider.notifier).signInUser(),
               key: const ValueKey<String>('google'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
@@ -35,8 +36,10 @@ class _NextButton extends ConsumerWidget {
             )
           : ElevatedButton(
               key: const ValueKey<String>('next'),
-              onPressed: () =>
-                  ref.read(onboardingIndexProvider.notifier).increment(),
+              onPressed: () {
+                onPressed?.call();
+                ref.read(onboardingIndexProvider.notifier).increment();
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 shape: RoundedRectangleBorder(

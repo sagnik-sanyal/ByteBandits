@@ -13,6 +13,12 @@ final StateNotifierProvider<AuthNotifier, AuthState> authNotifierProvider =
   ),
 );
 
+final StreamProvider<bool> isLoggedInProvider = StreamProvider<bool>((_) {
+  return FirebaseAuth.instance
+      .authStateChanges()
+      .map((User? user) => user != null);
+});
+
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthRepository _authRepository;
   AuthNotifier({
@@ -20,15 +26,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
   })  : _authRepository = authRepository,
         super(const AuthState.signedOut());
 
-  Task<AuthState> signInUser() => Task<AuthState>(
-        () async {
-          final Either<Failure, UserCredential> res =
-              await _authRepository.signInWithGoogle().run();
-          return res.match(
-            (Failure l) => state = AuthState.failure(failure: l),
-            (UserCredential r) =>
-                state = AuthState.signedIn(email: r.user!.email!),
-          );
-        },
-      );
+  Future<void> signInUser() async {
+    final Either<Failure, UserCredential> res =
+        await _authRepository.signInWithGoogle().run();
+    return res.match(
+      (Failure l) => state = AuthState.failure(failure: l),
+      (UserCredential r) => state = AuthState.signedIn(email: r.user!.email!),
+    );
+  }
 }

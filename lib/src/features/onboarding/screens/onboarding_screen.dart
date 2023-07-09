@@ -7,6 +7,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../app/gen/assets.gen.dart';
 import '../../../shared/text_widget.dart';
+import '../../auth/presentation/controller/auth_controller.dart';
 import '../controllers/onboarding_controller.dart';
 
 part 'widgets/widgets.dart';
