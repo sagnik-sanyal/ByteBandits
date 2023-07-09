@@ -42,9 +42,24 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/google-services.json
+
+# Xcode will place build artifacts here
+/ios/Flutter/App.framework
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+/ios/**.plist
+/ios/firebase_app_id_file.json
+
+# Windows
+/windows
 
 # dart generate files do not add
 **.g.dart
+**.freezed.dart
+
+/lib/configs/firebase_options.dart
 
 #.vs code folder
 .vscode/
+
