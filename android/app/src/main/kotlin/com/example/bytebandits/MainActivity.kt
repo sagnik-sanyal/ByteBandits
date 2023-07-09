@@ -1,4 +1,4 @@
-package com.example.bytebandits
+package com.bytebandits.fingo
 
 import io.flutter.embedding.android.FlutterActivity
 
