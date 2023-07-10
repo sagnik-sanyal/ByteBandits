@@ -18,7 +18,7 @@ class PaymentScreen extends ConsumerWidget {
     ref.listen<AsyncValue<void>>(
       paymentNotifierProvider,
       (_, AsyncValue<void>? value) {
-        value?.maybeWhen(
+        value?.whenOrNull(
           error: (Object? error, StackTrace? stackTrace) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -32,7 +32,6 @@ class PaymentScreen extends ConsumerWidget {
               ),
             );
           },
-          orElse: () {},
         );
       },
     );

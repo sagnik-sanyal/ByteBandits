@@ -20,6 +20,10 @@ class $AssetsIllustrationsGen {
   AssetGenImage get homeAbstract =>
       const AssetGenImage('assets/illustrations/home_abstract.png');
 
+  /// File path: assets/illustrations/no_results.png
+  AssetGenImage get noResults =>
+      const AssetGenImage('assets/illustrations/no_results.png');
+
   /// File path: assets/illustrations/o1.png
   AssetGenImage get o1 => const AssetGenImage('assets/illustrations/o1.png');
 
@@ -28,7 +32,8 @@ class $AssetsIllustrationsGen {
       const AssetGenImage('assets/illustrations/savings_card.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [abstract, homeAbstract, o1, savingsCard];
+  List<AssetGenImage> get values =>
+      [abstract, homeAbstract, noResults, o1, savingsCard];
 }
 
 class Assets {

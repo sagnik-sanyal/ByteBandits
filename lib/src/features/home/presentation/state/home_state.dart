@@ -10,8 +10,9 @@ sealed class HomeState with _$HomeState {
   const HomeState._();
   const factory HomeState.loading() = _Loading;
   const factory HomeState.loaded({
-    required List<TransactionModel> categorySpecificTransactions,
+    required CategoryList categorySpecificTransactions,
     required List<UserModel> friends,
+    required List<TransactionModel> transactionList,
   }) = _Loaded;
   const factory HomeState.error({
     required Object error,
@@ -20,11 +21,18 @@ sealed class HomeState with _$HomeState {
   bool get isLoading => this is _Loading;
 
   HomeState copiedWithLoaded({
-    required List<TransactionModel> categorySpecificTransactions,
-    required List<UserModel> friends,
+    CategoryList? categorySpecificTransactions,
+    List<UserModel>? friends,
+    List<TransactionModel>? transactionList,
   }) =>
-      HomeState.loaded(
-        categorySpecificTransactions: categorySpecificTransactions,
-        friends: friends,
+      maybeWhen(
+        loaded: (CategoryList c, List<UserModel> f, List<TransactionModel> t) {
+          return HomeState.loaded(
+            categorySpecificTransactions: categorySpecificTransactions ?? c,
+            friends: friends ?? f,
+            transactionList: transactionList ?? t,
+          );
+        },
+        orElse: () => this,
       );
 }

@@ -1,7 +1,13 @@
 part of '../home_screen.dart';
 
-class _TransactionLisTile extends StatelessWidget {
-  const _TransactionLisTile({Key? key}) : super(key: key);
+class TransactionLisTile extends StatelessWidget {
+  final String type;
+  final double? amount;
+  const TransactionLisTile({
+    Key? key,
+    required this.type,
+    this.amount,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,20 +23,83 @@ class _TransactionLisTile extends StatelessWidget {
           ),
         ),
         title: AppText.semiBold(
-          'Transaction',
+          type,
           color: Colors.black,
           fontSize: 16.spMin,
         ),
-        subtitle: AppText.regular(
-          'Some desc here',
-          color: const Color(0xFF707070),
-          fontSize: 16.spMin,
+        trailing: amount != null
+            ? AppText.semiBold(
+                amount.toString(),
+                color: Colors.black,
+                fontSize: 16.spMin,
+              )
+            : null,
+        leading: CircleAvatar(
+          radius: 20.r,
+          backgroundColor: const Color(0xffDDFCDF),
+          child: const FaIcon(FontAwesomeIcons.indianRupeeSign,
+              color: Colors.black),
         ),
-        leading: const CircleAvatar(
-          radius: 25,
-          backgroundColor: Color(0xffDDFCDF),
-          child: FaIcon(FontAwesomeIcons.indianRupeeSign, color: Colors.black),
-        ),
+      ),
+    );
+  }
+}
+
+class AllTransactionListTile extends StatelessWidget {
+  final String? amount;
+  final String? createdAt;
+  final String type;
+  const AllTransactionListTile({
+    super.key,
+    this.amount,
+    this.createdAt,
+    required this.type,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      style: ListTileStyle.list,
+      tileColor: Colors.transparent,
+      title: AppText.semiBold(
+        type,
+        color: Colors.white,
+        fontSize: 16.spMin,
+      ),
+      trailing: amount != null
+          ? AppText.semiBold(
+              '- ₹${amount!}',
+              color: Colors.redAccent,
+              fontSize: 16.spMin,
+            )
+          : null,
+      subtitle: createdAt != null
+          ? Text.rich(
+              TextSpan(
+                children: <InlineSpan>[
+                  WidgetSpan(
+                    child: FaIcon(
+                      FontAwesomeIcons.clock,
+                      size: 12.spMin,
+                      color: const Color(0xFF707070),
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' $createdAt',
+                    style: TextStyle(
+                      fontSize: 12.spMin,
+                      color: const Color(0xFF707070),
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : null,
+      leading: CircleAvatar(
+        radius: 25.r,
+        backgroundColor: Colors.red.withOpacity(0.7),
+        child:
+            const FaIcon(FontAwesomeIcons.indianRupeeSign, color: Colors.white),
       ),
     );
   }

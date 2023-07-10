@@ -17,6 +17,7 @@ import '../../../../core/errors/failure.dart';
 import '../../../../core/providers/global_providers.dart';
 import '../../../../core/services/rest_api.dart';
 import '../../auth/presentation/controller/user_notifier.dart';
+import '../../home/presentation/controllers/home_notifier.dart';
 import '../models/order_gen_model.dart';
 
 final AutoDisposeStateNotifierProvider<PaymentNotifier, AsyncValue<void>>
@@ -55,11 +56,15 @@ class PaymentNotifier extends StateNotifier<AsyncValue<void>> {
 
   Future<void> createOrder(String mcc) async {
     state = const AsyncLoading<void>();
+    if (_amount == null || _amount!.isEmpty) {
+      state = const AsyncError<void>('Please enter amount', StackTrace.empty);
+      return;
+    }
     Either<Failure, String> res = await client.post(
         '${BASE_URL}api/transaction/create-transaction',
-        body: <String, Object?>{
+        body: <String, String?>{
           'mcc': mcc,
-          'note': _notes,
+          if (_notes != null && _notes!.isNotEmpty) 'note': _notes,
           'amount': _amount,
           'email': userNotifier.state.email,
           'phone': '9999999999',
@@ -124,6 +129,7 @@ class PaymentNotifier extends StateNotifier<AsyncValue<void>> {
               .setTheme(theme)
               .build();
       await cfGatewayService?.doPayment(cfDropCheckoutPayment);
+      ref.invalidate(homeNotifierProvider);
       ref.read(navigatorKeyProvider).currentState?.pop();
     } on CFException {
       state = const AsyncError<void>('Something went wrong', StackTrace.empty);
