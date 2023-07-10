@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../shared/text_widget.dart';
+import '../controllers/payment_notifier.dart';
 
-class PaymentScreen extends StatelessWidget {
+class PaymentScreen extends ConsumerWidget {
   final String mccCode;
   const PaymentScreen({
     super.key,
@@ -12,7 +14,28 @@ class PaymentScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<AsyncValue<void>>(
+      paymentNotifierProvider,
+      (_, AsyncValue<void>? value) {
+        value?.maybeWhen(
+          error: (Object? error, StackTrace? stackTrace) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                  error.toString(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+          },
+          orElse: () {},
+        );
+      },
+    );
     return Scaffold(
       appBar: AppBar(
         title: const Text('Proceed to Payment'),
@@ -56,6 +79,9 @@ class PaymentScreen extends StatelessWidget {
                               color: Colors.white,
                               fontSize: 50,
                             ),
+                            onChanged: (String value) => ref
+                                .read(paymentNotifierProvider.notifier)
+                                .setAmount(value),
                             inputFormatters: <TextInputFormatter>[
                               FilteringTextInputFormatter.digitsOnly,
                             ],
@@ -87,6 +113,9 @@ class PaymentScreen extends StatelessWidget {
                             color: Colors.white,
                             fontSize: 16.spMin,
                           ),
+                          onChanged: (String value) => ref
+                              .read(paymentNotifierProvider.notifier)
+                              .setNotes(value),
                           textAlignVertical: TextAlignVertical.center,
                           textAlign: TextAlign.center,
                           inputFormatters: <TextInputFormatter>[
@@ -114,28 +143,41 @@ class PaymentScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      fixedSize: Size(0.65.sw, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.r),
-                      ),
-                    ),
-                    child: const AppText.semiBold(
-                      'Send',
-                      color: Colors.black,
-                    ),
-                  ),
+                  _SendButton(mccCode: mccCode),
                 ],
               ),
-              const SizedBox(
-                height: 20,
-              ),
+              const SizedBox(height: 20),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _SendButton extends ConsumerWidget {
+  final String mccCode;
+  const _SendButton({required this.mccCode});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final AsyncValue<void> val = ref.watch(paymentNotifierProvider);
+    return ElevatedButton(
+      onPressed: () =>
+          ref.read(paymentNotifierProvider.notifier).createOrder(mccCode),
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.white,
+        fixedSize: Size(0.65.sw, 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.r),
+        ),
+      ),
+      child: val.maybeWhen(
+        loading: () => const SizedBox.square(
+          dimension: 20,
+          child: CircularProgressIndicator(color: Colors.black),
+        ),
+        orElse: () => const AppText.semiBold('Send', color: Colors.black),
       ),
     );
   }

@@ -16,6 +16,8 @@ final Provider<HttpBaseClient> httpClientProvider = Provider<HttpBaseClient>(
   },
 );
 
+String BASE_URL = 'https://fing-go.el.r.appspot.com/';
+
 class HttpBaseClient {
   late final Client _client;
 
@@ -25,12 +27,11 @@ class HttpBaseClient {
 
   // Get the data from the remote server
   Future<Either<Failure, String>> get(
-    String path, {
+    String url, {
     Map<String, String>? headers,
   }) async {
     try {
-      Response response = await _client
-          .get(Uri.https('fing-go.el.r.appspot.com', path), headers: headers);
+      Response response = await _client.get(Uri.parse(url), headers: headers);
       if (response.statusCode == 200) {
         return right(response.body);
       }
@@ -52,13 +53,13 @@ class HttpBaseClient {
 
   //Post call to the api
   Future<Either<Failure, String>> post(
-    String path, {
+    String url, {
     Object? body,
     Map<String, String>? headers,
   }) async {
     try {
       Response response = await _client.post(
-        Uri.https('fing-go.el.r.appspot.com/', path),
+        Uri.parse(url),
         headers: headers,
         body: body,
       );

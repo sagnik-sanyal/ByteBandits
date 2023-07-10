@@ -21,4 +21,10 @@ sealed class Failure with _$Failure {
     required int code,
     required StackTrace stackTrace,
   }) = _HttpFailure;
+
+  String get errorMsg => map(
+        auth: (Failure f) => f.message,
+        unkown: (Failure f) => f.message,
+        http: (Failure f) => f.message,
+      );
 }

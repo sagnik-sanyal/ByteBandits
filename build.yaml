@@ -1,17 +1,17 @@
 targets:
   $default:
     builders:
-      json_serializable:json_serializable:
-        enabled: true
-        options:
-          create_factory: true
-          disallow_unrecognized_keys: false
-          explicit_to_json: true
-          ignore_unannotated: false
-          include_if_null: false
-        generate_for:
-          include:
-            - lib/src/features/**/domain/**.dart
+      # json_serializable:json_serializable:
+      #   enabled: true
+      #   options:
+      #     create_factory: true
+      #     disallow_unrecognized_keys: false
+      #     explicit_to_json: true
+      #     ignore_unannotated: false
+      #     include_if_null: false
+      #   generate_for:
+      #     include:
+      #       - lib/src/features/**/domain/**.dart
       flutter_gen:flutter_gen:
         enabled: true
         options:
@@ -21,13 +21,13 @@ targets:
           class_name_localization: Localization
         generate_for:
           - pubspec.yaml
-      freezed:freezed:
-        enabled: true
-        options:
-          from_json: false
-        generate_for:
-          include:
-            - lib/src/features/**/presentation/**.state.dart
-            - lib/src/**/domain/**.dart
-            - lib/core/errors/failure.dart
+      # freezed:freezed:
+      #   enabled: true
+      #   options:
+      #     from_json: false
+      #   generate_for:
+      #     include:
+      #       - lib/src/features/**/presentation/**.state.dart
+      #       - lib/src/**/domain/**.dart
+      #       - lib/core/errors/failure.dart
             

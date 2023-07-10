@@ -6,9 +6,7 @@ part 'auth.state.freezed.dart';
 
 @freezed
 class AuthState with _$AuthState {
-  const factory AuthState.signedIn({
-    required String email,
-  }) = _SignedIn;
+  const factory AuthState.signedIn() = _SignedIn;
 
   const factory AuthState.failure({
     required Failure failure,
