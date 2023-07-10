@@ -9,6 +9,19 @@ extension NavigationExt on BuildContext {
     }
   }
 
+  ///Push to a new screen using navigator 1.0 api
+  Future<T?> push<T extends Object?>(Widget route) =>
+      Navigator.of(this).push<T>(MaterialPageRoute<T>(
+        builder: (_) => route,
+      ));
+
+  ///Push Replacement to a new screen using navigator 1.0 api
+  Future<T?> pushReplacement<T extends Object?, TO extends Object?>(
+          Widget route) =>
+      Navigator.of(this).pushReplacement<T, TO>(MaterialPageRoute<T>(
+        builder: (_) => route,
+      ));
+
   /// Pushes a new route onto the navigator 2.0 pushNamed
   /// [routeName] is the name of the route to push
   /// [arguments] is the arguments to pass to the route

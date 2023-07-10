@@ -8,10 +8,12 @@ class AppText extends StatelessWidget {
   final Color color;
   final double fontSize;
   final TextAlign? textAlign;
+  final TextDecoration? decoration;
 
   const AppText.semiBold(
     this.text, {
     super.key,
+    this.decoration,
     this.textAlign,
     this.fontSize = 16,
     this.maxLines,
@@ -22,6 +24,7 @@ class AppText extends StatelessWidget {
   const AppText.regular(
     this.text, {
     super.key,
+    this.decoration,
     this.fontSize = 16,
     this.maxLines,
     this.textAlign,
@@ -32,6 +35,7 @@ class AppText extends StatelessWidget {
   const AppText.bold(
     this.text, {
     super.key,
+    this.decoration,
     this.fontSize = 16,
     this.textAlign,
     this.maxLines,
@@ -44,11 +48,12 @@ class AppText extends StatelessWidget {
     return Text(
       text,
       maxLines: maxLines,
-      overflow: TextOverflow.ellipsis,
       style: TextStyle(
         color: color,
+        decoration: decoration,
         fontSize: fontSize.spMin,
         fontWeight: fontWeight,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

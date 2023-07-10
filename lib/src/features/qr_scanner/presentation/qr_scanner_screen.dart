@@ -16,6 +16,7 @@ class QrScannerScreen extends ConsumerStatefulWidget {
 
 class _QrScannerScreenState extends ConsumerState<QrScannerScreen> {
   QRViewController? controller;
+
   @override
   void reassemble() {
     super.reassemble();
@@ -34,17 +35,34 @@ class _QrScannerScreenState extends ConsumerState<QrScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double scanArea = (MediaQuery.sizeOf(context).width < 400 ||
+            MediaQuery.sizeOf(context).height < 400)
+        ? 230.0
+        : 300.0;
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Scan QR Code'),
-      ),
-      body: Center(
-        child: QRView(
-          key: const ValueKey<String>('qrView'),
-          onQRViewCreated: (QRViewController controller) async {
-            this.controller = controller;
-            ref.read(qrNotifierProvider(controller));
-          },
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            const SliverAppBar(
+              title: Text('Scan Your QR'),
+            )
+          ];
+        },
+        body: Center(
+          child: QRView(
+            key: GlobalKey(debugLabel: 'QrView'),
+            onQRViewCreated: (QRViewController controller) async {
+              this.controller = controller;
+              ref.read(qrNotifierProvider(controller));
+            },
+            overlay: QrScannerOverlayShape(
+              borderColor: const Color(0xFFF9ED90),
+              borderRadius: 10,
+              borderLength: 30,
+              borderWidth: 10,
+              cutOutSize: scanArea,
+            ),
+          ),
         ),
       ),
     );
